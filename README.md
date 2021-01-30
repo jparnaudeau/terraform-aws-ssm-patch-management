@@ -201,13 +201,13 @@ you could find all Inputs & outputs of each submodule here :
 
 ### maintenance_windows
 
-[docs](maintenance_windows/README.md)
+[docs](https://github.com/jparnaudeau/terraform-aws-ssm-patch-management/tree/master/maintenance_windows/README.md)
 
 ### patch_baseline
 
-[docs](patch_baseline/README.md)
+[docs](https://github.com/jparnaudeau/terraform-aws-ssm-patch-management/tree/master/patch_baseline/README.md)
 
 ### register_default_patch_baseline
 
-[docs](register_default_patch_baseline/README.md)
+[docs](https://github.com/jparnaudeau/terraform-aws-ssm-patch-management/tree/master/register_default_patch_baseline/README.md)
 
