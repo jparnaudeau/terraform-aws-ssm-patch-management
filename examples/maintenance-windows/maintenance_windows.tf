@@ -70,7 +70,7 @@ module "ssm-patch-management" {
 
   # parameters for scan
   enable_mode_scan                 = true
-  scan_maintenance_window_schedule = "cron(0 0 17 ? * SUN *)"
+  scan_maintenance_window_schedule = "cron(0 0 8 ? * * *)"
   s3_bucket_prefix_scan_logs       = format("scan/%s", var.ssm_patch_logs_prefix)
   # By default, maintenance_windows_targets use the tag "Patch Group" = var.scan_patch_groups
   # scan_maintenance_windows_targets = [

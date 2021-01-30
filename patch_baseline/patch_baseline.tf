@@ -63,18 +63,18 @@ EOT
 }
 
 
-
 # resource "aws_ssm_patch_group" "scan_patchgroup" {
 #   count       = (var.enable_mode_scan ? 1 : 0) * length(var.scan_patch_groups)
 #   baseline_id = aws_ssm_patch_baseline.baseline.id
 #   patch_group = element(var.scan_patch_groups, count.index)
 # }
 
-# bug in terraform provider on aws_ssm_patch_group : can't associated the same patch group to a patch baseline. But it's not in accordance with the AWS Officials Docs
+# bug in terraform provider on aws_ssm_patch_group : can't associated the same patch group to a patch baseline. 
+# But it's not in accordance with the AWS Officials Docs.
 # need to use a null_resource instead
 # https://github.com/terraform-providers/terraform-provider-aws/issues/9603
 resource "null_resource" "register_patch_baseline_for_scan_patch_group" {
-  count = length(var.scan_patch_groups)
+  count = (var.enable_mode_scan ? 1 : 0) * length(var.scan_patch_groups)
 
   triggers = {
     baseline_id            = aws_ssm_patch_baseline.baseline.id

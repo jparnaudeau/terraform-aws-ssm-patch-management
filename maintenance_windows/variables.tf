@@ -73,6 +73,12 @@ variable "notification_arn" {
   default     = ""
 }
 
+variable "role_arn_for_notification" {
+  description = "Role Used by SSM Service Role to trigger notification"
+  type        = string
+  default     = ""
+}
+
 # ===========================================================
 # Maintenance Windows for Scan - Variables
 # ===========================================================
