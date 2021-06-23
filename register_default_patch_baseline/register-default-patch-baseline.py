@@ -17,21 +17,24 @@ def checkArguments(action,operatingSystem):
     return checkAction and checkOperatingSystem
 
 
-def retrieveAWSDefaultPatchBaselineForOperatingSystem(operatingSystem):
-    # the AWS default Patch Baseline are the same in any AWS Account
+def retrieveAWSDefaultPatchBaselineForOperatingSystem(client,operatingSystem):
+    # the AWS default Patch Baseline are the same in any AWS Account, depending of the region
 
-    mapAWSDefaultPatchBaselines = {}
-    mapAWSDefaultPatchBaselines['REDHAT_ENTERPRISE_LINUX'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-002f93afc8c43b096"
-    mapAWSDefaultPatchBaselines['CENTOS'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-0081b03b93d656fb9"
-    mapAWSDefaultPatchBaselines['AMAZON_LINUX_2'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-043cba60253bab521"
-    mapAWSDefaultPatchBaselines['AMAZON_LINUX'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-056d4257efe913420"
-    mapAWSDefaultPatchBaselines['DEBIAN'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-0995d101011ef0d2d"
-    mapAWSDefaultPatchBaselines['WINDOWS'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-0af17a967557961db"
-    mapAWSDefaultPatchBaselines['SUSE'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-0b2a80796f793fc54"
-    mapAWSDefaultPatchBaselines['UBUNTU'] = "arn:aws:ssm:eu-central-1:416089608788:patchbaseline/pb-0f40e1898bd7e2eca"
+    response = client.describe_patch_baselines(Filters=[
+                                                    {
+                                                        'Key': 'OWNER',
+                                                        'Values': [
+                                                            'AWS',
+                                                        ]
+                                                    },
+                                                ],
+                                                )
 
-    return mapAWSDefaultPatchBaselines[operatingSystem]
+    baseLineIdentities = response['BaselineIdentities']
 
+    for baselineIdentity in baseLineIdentities:
+        if baselineIdentity['OperatingSystem'] == operatingSystem:
+            return baselineIdentity['BaselineId']
 
 
 ###########################
@@ -62,7 +65,7 @@ if __name__ == '__main__':
                 else:
 
                     # retrieve the AWS Default Patch Baseline for the operatingSystem
-                    awsDefaultPatchBaselineId = retrieveAWSDefaultPatchBaselineForOperatingSystem(operatingSystem)
+                    awsDefaultPatchBaselineId = retrieveAWSDefaultPatchBaselineForOperatingSystem(client,operatingSystem)
 
                     # set this patch baseline to default
                     response = client.register_default_patch_baseline(BaselineId=awsDefaultPatchBaselineId)
