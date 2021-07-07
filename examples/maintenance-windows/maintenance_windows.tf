@@ -1,9 +1,14 @@
 terraform {
-  required_version = "~> 0.12.9"
+  required_version = ">= 0.15"
+
   required_providers {
-    aws = "~> 2.30"
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.15"
+    }
   }
 }
+
 
 ###############
 # Create SNS Topic
@@ -61,7 +66,7 @@ resource "aws_iam_role_policy_attachment" "role_attach_ssm_mw" {
 # - one maintenance windows for patching ec2 Instances with tag "Patch Group" = "TOPATCH" and "App" = "myapp" and "Critical" = "no", every sunday at 20:00 CET
 ###############
 module "ssm-patch-management" {
-  source = "github.com/jparnaudeau/terraform-aws-ssm-patch-management//maintenance_windows?ref=v1.0.0"
+  source = "github.com/jparnaudeau/terraform-aws-ssm-patch-management//maintenance_windows?ref=master"
 
   # tags parameters
   environment = var.environment
