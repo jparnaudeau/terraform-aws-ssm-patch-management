@@ -48,6 +48,7 @@ module "patch_baseline_centos" {
 module "register_patch_baseline_centos" {
   source = "../../register_default_patch_baseline"
 
+  region                     = var.aws_region
   set_default_patch_baseline = true
   patch_baseline_id          = module.patch_baseline_centos.patch_baseline_id
   operating_system           = local.operating_system_centos
