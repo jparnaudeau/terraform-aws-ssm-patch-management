@@ -3,6 +3,8 @@
 import sys
 import traceback
 import boto3
+from botocore.config import Config
+
 
 def checkArguments(action,operatingSystem):
     checkAction = False
@@ -43,20 +45,30 @@ def retrieveAWSDefaultPatchBaselineForOperatingSystem(client,operatingSystem):
 if __name__ == '__main__':
 
     try:
-        if len(sys.argv) != 4:
-            print("Missing argument : " + sys.argv[0] + " <register|deregister> <baselineId> <opertingSystem>")
+        if len(sys.argv) != 5:
+            print("Missing argument : " + sys.argv[0] + " <register|deregister> <baselineId> <opertingSystem> <region>")
             sys.exit()
 
         else:
-            action = sys.argv[1]
-            baselineId = sys.argv[2]
+            action          = sys.argv[1]
+            baselineId      = sys.argv[2]
             operatingSystem = sys.argv[3]
+            region          = sys.argv[4]
 
             # check arguments
             if checkArguments(action,operatingSystem):
                 # OK. we can works.
 
-                client = boto3.client('ssm')
+
+                my_config = Config(
+                                    region_name = region,
+                                    # signature_version = 'v4',
+                                    # retries = {
+                                    #     'max_attempts': 10,
+                                    #     'mode': 'standard'
+                                    # }
+                                )
+                client = boto3.client('ssm',config=my_config)
 
                 if action == 'register':
                     response = client.register_default_patch_baseline(BaselineId=baselineId)
