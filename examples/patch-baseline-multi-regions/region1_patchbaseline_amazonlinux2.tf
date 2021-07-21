@@ -1,11 +1,12 @@
 locals {
-  operating_system_windows = "WINDOWS"
+  operating_system_amazon_linux2  = "AMAZON_LINUX_2"
 }
 
 #####
-# Create Patch Baselines for Windows
+# Create Patch Baselines for amazonlinux
 #####
-module "patch_baseline_windows" {
+
+module "patch_baseline_amazonlinux2" {
   source = "../../patch_baseline"
 
   # tags parameters
@@ -13,28 +14,28 @@ module "patch_baseline_windows" {
 
   # patch baseline parameters
   approved_patches_compliance_level = "HIGH"
-  operating_system                  = local.operating_system_windows
-  description                       = "Windows - PatchBaseLine - Apply Critical Security Updates"
+  operating_system                  = local.operating_system_amazon_linux2
+  description                       = "AmazonLinux2 - PatchBaseLine - Apply Critical Security Updates"
   tags                              = var.tags
 
   # define rules inside patch baseline
   patch_baseline_approval_rules = [
     {
-      approve_after_days = 7
-      compliance_level   = "UNSPECIFIED"
+      approve_after_days  = 7
+      compliance_level    = "CRITICAL"
       enable_non_security = false
       patch_baseline_filters = [
         {
           name   = "PRODUCT"
-          values = ["WindowsServer2016", "WindowsServer2012R2"]
+          values = ["AmazonLinux2", "AmazonLinux2.0"]
         },
         {
           name   = "CLASSIFICATION"
-          values = ["CriticalUpdates", "SecurityUpdates"]
+          values = ["Security"]
         },
         {
-          name   = "MSRC_SEVERITY"
-          values = ["Critical", "Important"]
+          name   = "SEVERITY"
+          values = ["Critical"]
         }
       ]
     }
@@ -45,11 +46,11 @@ module "patch_baseline_windows" {
 }
 
 # register as default patch baseline our patch baseline
-module "register_patch_baseline_windows" {
+module "register_patch_baseline_amazonlinux2" {
   source = "../../register_default_patch_baseline"
 
-  region                     = var.aws_region
+  region                     = var.first_region
   set_default_patch_baseline = true
-  patch_baseline_id          = module.patch_baseline_windows.patch_baseline_id
-  operating_system           = local.operating_system_windows
+  patch_baseline_id          = module.patch_baseline_amazonlinux2.patch_baseline_id
+  operating_system           = local.operating_system_amazon_linux2
 }

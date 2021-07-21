@@ -1,3 +1,8 @@
+variable "region" {
+  description = "The AWS Region in which the register will be proceed"
+  type        = string
+}
+
 variable "patch_baseline_id" {
   description = "Patch Baseline Id that we want to set default patch baseline"
   type        = string
