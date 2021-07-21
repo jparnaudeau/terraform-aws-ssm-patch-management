@@ -57,6 +57,7 @@ module "r2_register_patch_baseline_amazonlinux2" {
   }
 
   region                     = var.second_region
+  profile                    = var.profile
   set_default_patch_baseline = true
   patch_baseline_id          = module.r2_patch_baseline_amazonlinux2.patch_baseline_id
   operating_system           = local.operating_system_amazon_linux2

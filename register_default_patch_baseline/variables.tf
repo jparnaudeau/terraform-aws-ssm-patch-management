@@ -3,6 +3,12 @@ variable "region" {
   type        = string
 }
 
+variable "profile" {
+  description = "The profile to use for registration process"
+  type        = string
+  default     = ""
+}
+
 variable "patch_baseline_id" {
   description = "Patch Baseline Id that we want to set default patch baseline"
   type        = string

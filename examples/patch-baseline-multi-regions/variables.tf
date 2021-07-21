@@ -11,6 +11,12 @@ variable "second_region" {
   type        = string
 }
 
+variable "profile" {
+  description = "A specific profile to use when launching default patch baseline registration"
+  type        = string
+  default     = ""
+}
+
 variable "environment" {
   description = "Envrionment name. Use in naming resources"
   type        = string

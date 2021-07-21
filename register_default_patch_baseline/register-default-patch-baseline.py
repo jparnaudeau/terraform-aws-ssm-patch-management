@@ -39,14 +39,30 @@ def retrieveAWSDefaultPatchBaselineForOperatingSystem(client,operatingSystem):
             return baselineIdentity['BaselineId']
 
 
+def createBoto3Client(region_name,profile_name):
+
+    my_config = Config(
+                        region_name = region_name,
+                        # signature_version = 'v4',
+                        # retries = {
+                        #     'max_attempts': 10,
+                        #     'mode': 'standard'
+                        # }
+                    )
+    if profile_name:
+        return boto3.session.Session(profile_name=profile_name).client('ssm',config=my_config)
+    else:
+        return boto3.client('ssm',config=my_config)
+
+
 ###########################
 # MAIN
 ###########################
 if __name__ == '__main__':
 
     try:
-        if len(sys.argv) != 5:
-            print("Missing argument : " + sys.argv[0] + " <register|deregister> <baselineId> <opertingSystem> <region>")
+        if len(sys.argv) != 5 and len(sys.argv) != 6:
+            print("Missing argument : " + sys.argv[0] + " <register|deregister> <baselineId> <opertingSystem> <region> (<profile>)")
             sys.exit()
 
         else:
@@ -54,21 +70,17 @@ if __name__ == '__main__':
             baselineId      = sys.argv[2]
             operatingSystem = sys.argv[3]
             region          = sys.argv[4]
+            if len(sys.argv) == 6:
+                profile = sys.argv[5]
+            else:
+                profile = None
 
             # check arguments
             if checkArguments(action,operatingSystem):
                 # OK. we can works.
 
-
-                my_config = Config(
-                                    region_name = region,
-                                    # signature_version = 'v4',
-                                    # retries = {
-                                    #     'max_attempts': 10,
-                                    #     'mode': 'standard'
-                                    # }
-                                )
-                client = boto3.client('ssm',config=my_config)
+                # retrieve boto3 session
+                client = createBoto3Client(region,profile)
 
                 if action == 'register':
                     response = client.register_default_patch_baseline(BaselineId=baselineId)
