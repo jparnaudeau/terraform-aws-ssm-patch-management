@@ -17,5 +17,5 @@ def retrieveAllPatchBaselines(ssm,operatingSystem):
         result = retrieveEffectivePatchBaselines(ssm,baselineId)
         return result
 
-# Main funtction that is going to them them functions together and add them logging logic
+# Main funtction that is going to tie them them functions together and add them logging logic
 def main(ssm):
