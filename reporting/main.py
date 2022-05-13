@@ -6,7 +6,7 @@ response = client.describe_effective_patches_for_patch_baseline(
 )
 
 
-def retrieveAWSDefaultPatchBaselineForOperatingSystem(client,operatingSystem):
+def retrieveAllPatchBaselines(client,operatingSystem):
     # the AWS default Patch Baseline are the same in any AWS Account, depending of the region
 
     response = client.describe_patch_baselines()
