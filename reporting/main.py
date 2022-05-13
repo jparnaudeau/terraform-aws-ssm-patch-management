@@ -21,5 +21,6 @@ def retrieveAllPatchBaselines(ssm,operatingSystem):
         return result
 
 # Main funtction that is going to tie them them functions together and add them logging and report sending logic
-def main(ssm):
+def main(ssm,operatingSystem):
     availableBaselines = retrieveAllPatchBaselines(ssm,operatingSystem)
+    print(availableBaselines)
