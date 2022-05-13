@@ -2,8 +2,9 @@ ssm_config = Config(region_name = region)
 
 ssm = boto3.client('ssm',config=)
 
-def retreiveEffectivePatchBaselines(ssm,baselineId)
-response = ssm.describe_effective_patches_for_patch_baseline( BaselineId=baselineId, MaxResults=123, NextToken='string')
+def retreiveEffectivePatchBaselines(ssm,baselineId):
+    response = ssm.describe_effective_patches_for_patch_baseline( BaselineId=baselineId, MaxResults=123, NextToken='string')
+    return response
 
 
 def retrieveAllPatchBaselines(ssm,operatingSystem):
@@ -11,11 +12,12 @@ def retrieveAllPatchBaselines(ssm,operatingSystem):
     response = ssm.describe_patch_baselines()
     # Get them Baseline Ids
     baseLineIdentities = response['BaselineIdentities']
-    # Iterate through them baselines ids, retreive them effective patches
+    # Iterate through them baselines ids, retrieve them effective patches
     for baselineIdentity in baseLineIdentities:
         baselineId=baselineIdentity['BaselineId']
         result = retrieveEffectivePatchBaselines(ssm,baselineId)
         return result
 
-# Main funtction that is going to tie them them functions together and add them logging logic
+# Main funtction that is going to tie them them functions together and add them logging and report sending logic
 def main(ssm):
+
