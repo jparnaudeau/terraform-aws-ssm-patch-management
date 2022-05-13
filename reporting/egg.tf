@@ -10,6 +10,6 @@ data "aws_region" "current" {}
 
 provisioner "local-exec" {
     command = <<EOT
-      ${path.module}/main.py register ${self.triggers.baseline_id} ${self.triggers.operating_system} ${self.triggers.region}
+      ${path.module}/_init_.py.py register ${self.triggers.baseline_id} ${self.triggers.operating_system} ${self.triggers.region}
 EOT
   }
