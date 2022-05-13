@@ -1,4 +1,8 @@
 data "aws_region" "current" {}
+
+data "local_file" "baselineIds" {
+    filename = "${path.module}/baselineIds.json"
+}
  
 triggers = {
     region           = data.aws_region.current.name
@@ -8,7 +12,7 @@ triggers = {
 
 resource "local_file" "baselineIds" {
     content  = ""
-    filename = "${path.module}/baselineIds"
+    filename = "${path.module}/baselineIds.json"
 }
 
 provisioner "local-exec" {

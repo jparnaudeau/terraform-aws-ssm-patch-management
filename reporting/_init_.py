@@ -1,6 +1,6 @@
 ssm_config = Config(region_name = region)
 
-ssm = boto3.client('ssm',config=)
+ssm = boto3.client('ssm',config=ssm_config)
 
 baselineIds = []
 
