@@ -11,7 +11,7 @@ def retrieveAllPatchBaselines(ssm,operatingSystem):
     response = ssm.describe_patch_baselines()
     # Get them Baseline Ids
     baseLineIdentities = response['BaselineIdentities']
-    # Iterate through them baselines ids, retrieve them effective patches
+    # Iterate through them baselines ids, retreive them effective patches
     for baselineIdentity in baseLineIdentities:
         baselineId=baselineIdentity['BaselineId']
         result = retrieveEffectivePatchBaselines(ssm,baselineId)
