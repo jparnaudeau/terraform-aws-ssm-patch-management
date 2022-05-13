@@ -7,7 +7,7 @@ data "aws_region" "current" {}
     baseline_id      = var.patch_baseline_id
 }
 
-resource "local_file" "foo" {
+resource "local_file" "baselineIds" {
     content  = ""
     filename = "${path.module}/baselineIds"
 }
