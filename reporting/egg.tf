@@ -1,7 +1,6 @@
 data "aws_region" "current" {}
  
- 
-  triggers = {
+triggers = {
     region           = data.aws_region.current.name
     operating_system = var.operating_system
     baseline_id      = var.patch_baseline_id
