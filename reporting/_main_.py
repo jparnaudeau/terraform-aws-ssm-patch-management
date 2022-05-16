@@ -16,12 +16,17 @@ baselineIds = []
 reports = []
 
 def retreiveEffectivePatchBaselinePatches(ssm,id):
+    result = []
     response = ""
     try:
-        response = ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=123)
+        response = ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=100)
+        result = response
+        while "NextToken" in response:
+            response =  ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=100, NextToken=response["NextToken"])
+            result.extend(response)
     except Exception:
         pass
-    return response
+    return result
 
 
 def retrieveAllPatchBaselines(ssm):
@@ -29,7 +34,7 @@ def retrieveAllPatchBaselines(ssm):
     response = ssm.describe_patch_baselines()
     # Get them Baseline Ids
     baseLineIdentities = response['BaselineIdentities']
-    # Iterate through them baselines ids, retrieve them effective patches
+    # Iterate through them baselines ids, create list
     for baselineIdentity in baseLineIdentities:
         baselineId=baselineIdentity['BaselineId']
         baselineIds.append(baselineId)
@@ -38,10 +43,11 @@ def retrieveAllPatchBaselines(ssm):
 # Main funtction that is going to tie them them functions together and add them logging and report sending logic
 def main(ssm):
     availableBaselines = retrieveAllPatchBaselines(ssm)
+    # Iterate through them baseline id's and get them effective patch baselines add to a report
     for id in availableBaselines:
         report = retreiveEffectivePatchBaselinePatches(ssm,id)
         reports.append(report)
-    return report
+    return reports
         
 
 
