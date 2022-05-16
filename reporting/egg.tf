@@ -15,7 +15,7 @@ resource "local_file" "baselineIds" {
 
 resource "null_resource" "baselineIds" {
     provisioner "local-exec" {
-    command = "${path.module}/_init_.py.py register ${self.triggers.baseline_id} ${self.triggers.region} >> '${path.module}/baselineIds.json'"
+    command = "${path.module}/_init_.py sudo tee '${path.module}/baselineIds.json'"
   }
 }
 
