@@ -1,6 +1,16 @@
-ssm_config = Config(region_name = region)
+#!/usr/bin/python
 
-ssm = boto3.client('ssm',config=ssm_config)
+import boto3
+import os
+from botocore.config import Config
+
+region = os.environ['AWS_DEFAULT_REGION']
+
+ssm_config = Config(
+    region_name = region
+    )
+
+ssm = boto3.client('ssm', config=ssm_config)
 
 baselineIds = []
 

@@ -14,8 +14,11 @@ resource "local_file" "baselineIds" {
 }
 
 resource "null_resource" "baselineIds" {
+    triggers = {
+        region = data.aws_region.current.name
+    }
     provisioner "local-exec" {
-    command = "${path.module}/_init_.py sudo tee '${path.module}/baselineIds.json'"
+    command = "python ${path.module}/_main_.py register ${self.triggers.region} >> '${path.module}/baselineIds.json'"
   }
 }
 
