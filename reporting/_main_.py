@@ -13,9 +13,14 @@ ssm_config = Config(
 ssm = boto3.client('ssm', config=ssm_config)
 
 baselineIds = []
+reports = []
 
-def retreiveEffectivePatchBaselines(ssm,baselineId):
-    response = ssm.describe_effective_patches_for_patch_baseline(BaselineId=baselineId, MaxResults=123, NextToken='string')
+def retreiveEffectivePatchBaselinePatches(ssm,id):
+    response = ""
+    try:
+        response = ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=123)
+    except Exception:
+        pass
     return response
 
 
@@ -33,6 +38,12 @@ def retrieveAllPatchBaselines(ssm):
 # Main funtction that is going to tie them them functions together and add them logging and report sending logic
 def main(ssm):
     availableBaselines = retrieveAllPatchBaselines(ssm)
-    print(availableBaselines)
+    for id in availableBaselines:
+        report = retreiveEffectivePatchBaselinePatches(ssm,id)
+        reports.append(report)
+    return report
+        
+
 
 main(ssm)
+print(reports)
