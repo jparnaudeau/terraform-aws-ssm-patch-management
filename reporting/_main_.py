@@ -15,7 +15,7 @@ ssm_config = Config(
 ssm = boto3.client('ssm', config=ssm_config)
 
 def retreiveEffectivePatchBaselinePatches(ssm,id):
-    result = []
+    result = ''
     try:
         response = ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=100)
         while "NextToken" in response:
