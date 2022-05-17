@@ -7,29 +7,24 @@ from botocore.config import Config
 region=os.environ['region']
 
 file=os.environ['file']
-
+baselineIds = []
 ssm_config = Config(
     region_name = region
     )
 
 ssm = boto3.client('ssm', config=ssm_config)
 
-baselineIds = []
-
 def retreiveEffectivePatchBaselinePatches(ssm,id):
     result = []
-    response = ""
     try:
         response = ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=100)
         while "NextToken" in response:
-            response =  ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=100, NextToken=response["NextToken"])
-            result.extend(response)
+            result =  ssm.describe_effective_patches_for_patch_baseline(BaselineId=id, MaxResults=100, NextToken=response["NextToken"])
+            result.append((response['EffectivePatches']))
     except Exception:
         pass
-    sreport= ' '.join([str(item)for item in result])
-    f = open(file, "a")
-    f.write(sreport)
-    f.close
+
+    return result
 
 def retrieveAllPatchBaselines(ssm):
     # Get them Baselines
@@ -48,5 +43,9 @@ def main(ssm):
     # Iterate through them baseline id's and get them effective patch baselines add to a report
     for id in availableBaselines:
         report = retreiveEffectivePatchBaselinePatches(ssm,id)
+        f = open(file, "a")
+        content=' '.join([str(report)])
+        f.write(content)
+    f.close()
 
 main(ssm)
