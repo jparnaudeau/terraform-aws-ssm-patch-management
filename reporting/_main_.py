@@ -40,10 +40,10 @@ def retrieveAllPatchBaselines(ssm):
 # Main funtction that is going to tie them them functions together and add them logging and report sending logic
 def main(ssm):
     availableBaselines = retrieveAllPatchBaselines(ssm)
+    f = open(file, "a")
     # Iterate through them baseline id's and get them effective patch baselines add to a report
     for id in availableBaselines:
         report = retreiveEffectivePatchBaselinePatches(ssm,id)
-        f = open(file, "a")
         content=' '.join([str(report)])
         f.write(content)
     f.close()
